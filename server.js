@@ -11,8 +11,7 @@ const path= require("path")
 app.use("/api/user", userRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/doctor", doctorRoute);
-app.use(express.static(path.join(__dirname,'./client/build')));
-app.get('*',(req, res)=> res.sendFile(path.join(__dirname,'./client/build/index.html')));
+
 
 const port = process.env.PORT || 5000;
 app.get("/", (req, res) => res.send("well done Ayan"));
