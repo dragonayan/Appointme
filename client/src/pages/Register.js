@@ -4,18 +4,23 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
+//redux
 import { hideLoading, showLoading } from "../redux/alertsSlice";
 import { useState } from "react";
-function Register() {
+const Register=()=> {
 
   const navigate = useNavigate();
-  const[loading,setloading] =useState(false);
+  const dispatch = useDispatch();
+
+//define onfinish function
   const onFinish = async (values) => {
     try {
       
-      setloading(true);
+      
+      dispatch(showLoading());
+      //sends post request to the end point as the values and waits for the response 
       const response = await axios.post("/api/user/register", values);
-     setloading(false)
+      dispatch(hideLoading());
       if (response.data.success) {
         toast.success(response.data.message);
         navigate("/login");
@@ -23,7 +28,7 @@ function Register() {
         toast.error(response.data.message);
       }
     } catch (error) {
-   setloading(false)
+      dispatch(hideLoading());
       toast.error("Something went wrong");
     }
   };
