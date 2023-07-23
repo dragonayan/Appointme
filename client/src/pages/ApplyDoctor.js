@@ -9,7 +9,8 @@ import { useNavigate } from "react-router-dom";
 import DoctorForm from "../components/DoctorForm";
 import moment from "moment";
 
-function ApplyDoctor() {
+
+const ApplyDoctor=()=> {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -32,6 +33,7 @@ function ApplyDoctor() {
           },
         }
       );
+      
       dispatch(hideLoading());
       if (response.data.success) {
         toast.success(response.data.message);
@@ -49,6 +51,7 @@ function ApplyDoctor() {
     <Layout>
       <h1 className="page-title">Apply Doctor</h1>
       <hr />
+    
 
       <DoctorForm onFinish={onFinish} />
     </Layout>
