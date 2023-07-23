@@ -48,7 +48,7 @@ router.post("/login", async (req, res) => {
         .send({ message: "Password is incorrect", success: false });
     } else {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
+        expiresIn: "2m",
       });
       res
         .status(200)
@@ -61,6 +61,8 @@ router.post("/login", async (req, res) => {
       .send({ message: "Error logging in", success: false, error });
   }
 });
+
+
 
 router.post("/get-user-info-by-id", authMiddleware, async (req, res) => {
   try {
