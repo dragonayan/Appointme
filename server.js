@@ -13,7 +13,7 @@ app.use("/api/admin", adminRoute);
 app.use("/api/doctor", doctorRoute);
 
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT ;
 app.get("/", (req, res) => res.send("well done Ayan"));
 
 
