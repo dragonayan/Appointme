@@ -1,78 +1,59 @@
-import { Button, Form, Input } from "antd";
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import Layout from "../../components/Layout";
+import { showLoading, hideLoading } from "../../redux/alertsSlice";
 import axios from "axios";
-import toast from "react-hot-toast";
-//redux
-import { hideLoading, showLoading } from "../redux/alertsSlice";
-import { useState } from "react";
-const Register=()=> {
+import { Table } from "antd";
+import moment from "moment";
 
-  const navigate = useNavigate();
+function Userslist() {
+  const [users, setUsers] = useState([]);
   const dispatch = useDispatch();
-
-//define onfinish function
-  const onFinish = async (values) => {
+  const getUsersData = async () => {
     try {
-      
-      
       dispatch(showLoading());
-      //sends post request to the end point as the values and waits for the response 
-      const response = await axios.post("/api/user/register", values);
+      const resposne = await axios.get("/api/admin/get-all-users", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       dispatch(hideLoading());
-      if (response.data.success) {
-        toast.success(response.data.message);
-        navigate("/login");
-      } else {
-        toast.error(response.data.message);
+      if (resposne.data.success) {
+        setUsers(resposne.data.data);
       }
     } catch (error) {
       dispatch(hideLoading());
-      toast.error("Something went wrong");
     }
   };
 
+  useEffect(() => {
+    getUsersData();
+  }, []);
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      render: (record , text) => moment(record.createdAt).format("DD-MM-YYYY"),
+    },
+    
+  ];
+
   return (
-    <div className="authentication" style={{ backgroundImage: "url('https://ik.imagekit.io/wnn5dux89/i1.jpg?updatedAt=1688845031574')", backgroundRepeat: "no-repeat", backgroundSize: "cover", backgroundPosition: "center" }}>
-      <div
-        className="background-overlay"
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5))",
-        }}
-      ></div>
-      <div className="authentication-form card p-3">
-        <h1 className="card-title">Get Started</h1>
-        <Form layout="vertical" onFinish={onFinish}>
-          <Form.Item label="Name" name="name">
-            <Input placeholder="Name" />
-          </Form.Item>
-          <Form.Item label="Email" name="email">
-            <Input placeholder="Email" />
-          </Form.Item>
-          <Form.Item label="Password" name="password">
-            <Input placeholder="Password" type="password" />
-          </Form.Item>
-
-          <Button
-            className="primary-button my-2 full-width-button"
-            htmlType="submit"
-          >
-            REGISTER
-          </Button>
-
-          <Link to="/login" className="anchor mt-2">
-            CLICK HERE TO LOGIN
-          </Link>
-        </Form>
-      </div>
-    </div>
+    <Layout>
+      <h1 className="page-header">Users List</h1>
+      <hr />
+      <Table columns={columns} dataSource={users}/>
+    </Layout>
   );
 }
 
-export default Register;
+export default Userslist;
