@@ -16,8 +16,9 @@ import Profile from "./pages/Doctor/Profile";
 import BookAppointment from "./pages/BookAppointment";
 import Appointments from "./pages/Appointments";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
-import Landing from './pages/Landing';
+
 function App() {
+  //seting the state if the loading component
   const { loading } = useSelector((state) => state.alerts);
   return (
     <BrowserRouter>
