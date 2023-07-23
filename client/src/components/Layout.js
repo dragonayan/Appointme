@@ -41,6 +41,11 @@ function Layout({ children }) {
       icon: "ri-file-list-line",
     },
     {
+      name: "Self-appointments",
+      path: "/appointments",
+      icon: "ri-file-list-line",
+    },
+    {
       name: "Profile",
       path: `/doctor/profile/${user?._id}`,
       icon: "ri-user-line",
@@ -93,6 +98,7 @@ function Layout({ children }) {
                   <i className={menu.icon}></i>
                   {!collapsed && <Link to={menu.path}>{menu.name}</Link>}
                 </div>
+
               );
             })}
             <div
