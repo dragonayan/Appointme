@@ -5,33 +5,35 @@ import { Col, Row } from "antd";
 import Doctor from "../components/Doctor";
 import { useDispatch } from "react-redux";
 import { showLoading, hideLoading } from "../redux/alertsSlice";
-import Search from "antd/lib/transfer/search";
+import "antd/lib/transfer/search";
+import "../index.css";
 
 function Home() {
   const [doctors, setDoctors] = useState([]);
   const dispatch = useDispatch();
- 
-  const [searchkey, setsearchkey] = useState('')
+
+  const [searchkey, setsearchkey] = useState("");
   const getData = async () => {
     try {
-      dispatch(showLoading())
+      dispatch(showLoading());
       const response = await axios.get("/api/user/get-all-approved-doctors", {
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
         },
       });
-      dispatch(hideLoading())
+      dispatch(hideLoading());
       if (response.data.success) {
         setDoctors(response.data.data);
       }
     } catch (error) {
-      dispatch(hideLoading())
+      dispatch(hideLoading());
     }
   };
 
   useEffect(() => {
     getData();
   }, []);
+
   function filterBySearch() {
     const filtered = doctors.filter(
       (doctor) =>
@@ -39,23 +41,26 @@ function Home() {
         doctor.lastName.toLowerCase().includes(searchkey) ||
         doctor.specialization.toLowerCase().includes(searchkey)
     );
-    
-    setDoctors(filtered)
+
+    setDoctors(filtered);
   }
+
   return (
     <Layout>
       <div className="home-heading">
         <h1>List of Available Doctors</h1>
       </div>
       <input
-            type="text"
-            className="form-control i2 m-2"
-            placeholder='Search By Doctor or specalization'
-            value={searchkey}
-            onKeyUp={filterBySearch}
-            onChange={(e) => { setsearchkey(e.target.value) }}
-          />
-      
+        type="text"
+        className="form-control i2 m-2"
+        placeholder="Search By Doctor or specialization"
+        value={searchkey}
+        onKeyUp={filterBySearch}
+        onChange={(e) => {
+          setsearchkey(e.target.value);
+        }}
+      />
+
       <Row gutter={20}>
         {doctors.map((doctor) => (
           <Col span={8} xs={24} sm={24} lg={8} key={doctor.id}>
@@ -65,15 +70,32 @@ function Home() {
           </Col>
         ))}
       </Row>
+      <section className="wrapper">
+        <div id="stars"></div>
+        <div id="stars2"></div>
+        <div id="stars3"></div>
+        <div id="title"></div>
+      </section>
       <style>
         {`
+          body {
+            background-color: black;
+            color: white;
+          }
+
           .home-heading {
             margin-bottom: 24px;
             text-align: center;
           }
 
+          .form-control {
+            background-color: #1a1a1a;
+            color: white;
+            border-color: #1a1a1a;
+          }
+
           .doctor-card {
-            background-color: #f1f1f1;
+            background-color: #292929;
             border-radius: 8px;
             padding: 16px;
             transition: all 0.3s;
@@ -84,9 +106,8 @@ function Home() {
             transform: translateY(-10px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             animation: trembling 1s infinite;
-            
-            
           }
+
           @keyframes trembling {
             0% {
               transform: rotate(0);
@@ -100,7 +121,6 @@ function Home() {
             100% {
               transform: rotate(0);
             }
-          
         `}
       </style>
     </Layout>
